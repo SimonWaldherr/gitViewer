@@ -22,8 +22,16 @@
   <ul class="link-list">
     <li><a href="/tree?ref={{.Ref}}">Browse tree at {{.Ref}}</a></li>
     <li><a href="/commits?ref={{.Ref}}">View recent commits</a></li>
-    {{if .HasGHPages}}
-      <li><a href="/gh-pages/">Preview gh-pages static site</a></li>
+    {{if .PagesBranches}}
+      <li>Preview branches as static sites:
+        <ul>
+          {{range .PagesBranches}}
+            <li><a href="/pages/{{.}}/">{{.}}</a></li>
+          {{end}}
+        </ul>
+      </li>
+    {{else if .HasGHPages}}
+      <li><a href="/pages/gh-pages/">Preview gh-pages static site</a></li>
     {{end}}
     <li><a href="/workflows?ref={{.Ref}}">Inspect CI workflows (.github/workflows)</a></li>
   </ul>

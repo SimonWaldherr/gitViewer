@@ -15,7 +15,7 @@ A minimal, lightweight web-based Git repository viewer written in Go. Similar in
 - **Commit History**: Browse the commit log with dates and messages
 - **Diff Viewer**: Compare changes between commits or branches
 - **GitHub Actions**: View GitHub Actions workflow files
-- **gh-pages Support**: Serve static sites from the gh-pages branch
+- **Pages Viewer**: Serve any branch as a static site (not just gh-pages!)
 - **Branch Switching**: Easily switch between different branches
 - **Raw File Access**: Download raw file contents
 - **Responsive UI**: Clean, minimal web interface
@@ -24,13 +24,15 @@ A minimal, lightweight web-based Git repository viewer written in Go. Similar in
 
 ### From Source
 
-Requires Go 1.20 or later:
+Requires Go 1.25.4 or later:
 
 ```bash
 git clone https://github.com/SimonWaldherr/gitViewer.git
 cd gitViewer
-go build -o gitviewer .
+go build .
 ```
+
+This will create a `gitViewer` executable in the current directory.
 
 ### Using go install
 
@@ -45,7 +47,7 @@ go install github.com/SimonWaldherr/gitViewer@latest
 Start the server in the current Git repository:
 
 ```bash
-gitviewer
+gitViewer
 ```
 
 By default, the server listens on `:8080`. Open your browser and navigate to:
@@ -59,7 +61,7 @@ http://localhost:8080
 Serve a specific Git repository:
 
 ```bash
-gitviewer /path/to/your/repo
+gitViewer /path/to/your/repo
 ```
 
 ### Custom Port
@@ -67,19 +69,19 @@ gitviewer /path/to/your/repo
 Change the listen address:
 
 ```bash
-gitviewer -addr :3000
+gitViewer -addr :3000
 ```
 
 Or bind to a specific interface:
 
 ```bash
-gitviewer -addr 127.0.0.1:8080
+gitViewer -addr 127.0.0.1:8080
 ```
 
 ### Complete Example
 
 ```bash
-gitviewer -addr :9090 ~/projects/my-repo
+gitViewer -addr :9090 ~/projects/my-repo
 ```
 
 ## Command-Line Options
@@ -88,6 +90,37 @@ gitviewer -addr :9090 ~/projects/my-repo
 -addr string
     HTTP listen address (default ":8080")
 ```
+
+## Serving Branches as Static Sites
+
+One of gitViewer's unique features is the ability to serve **any branch** as a static website, not just `gh-pages`. This is perfect for:
+
+- **Preview branches**: View documentation or static site builds from feature branches
+- **Multi-version docs**: Serve different versions from different branches
+- **Testing**: Preview static builds before merging to production
+- **Development**: View builds from any branch without switching your working directory
+
+### Examples
+
+```bash
+# View the main branch as a static site
+http://localhost:8080/pages/main/
+
+# View a feature branch (with slashes in the name)
+http://localhost:8080/pages/feature/new-docs/
+
+# View a specific file in a branch
+http://localhost:8080/pages/develop/assets/style.css
+
+# Default: gh-pages (for backward compatibility)
+http://localhost:8080/pages/
+```
+
+The pages viewer automatically:
+- Detects valid branch names (even with slashes)
+- Serves `index.html` for directory paths
+- Sets correct MIME types for all file types
+- Provides a dropdown menu in the UI to easily switch between branches
 
 ## Features in Detail
 
@@ -126,10 +159,15 @@ Compare changes:
 ### GitHub Actions (/workflows)
 List workflow files from `.github/workflows` directory
 
-### gh-pages Support (/gh-pages/)
-If your repository has a `gh-pages` branch, access it as a static site:
-- Serves `index.html` by default
-- Proper MIME types for web assets
+### Pages Viewer (/pages/)
+Serve any branch as a static site, not just gh-pages:
+- Access any branch: `/pages/{branch-name}/` (e.g., `/pages/main/`, `/pages/docs/`, `/pages/feature/new-ui/`)
+- Supports branch names with slashes (e.g., `/pages/feature/ui-redesign/`)
+- Serves `index.html` by default for directory paths
+- Proper MIME types for web assets (HTML, CSS, JS, images, etc.)
+- Navigate through nested paths: `/pages/{branch}/path/to/file.html`
+- Backward compatible: `/pages/` defaults to gh-pages branch
+- Dropdown menu in navigation bar shows all available branches
 
 ## Technical Details
 
@@ -141,8 +179,8 @@ If your repository has a `gh-pages` branch, access it as a static site:
 
 ## Requirements
 
-- Go 1.20 or later (for building)
-- Git installed and available in PATH
+- Go 1.25.4 or later (for building from source)
+- Git installed and available in PATH (for runtime)
 
 ## Development
 
@@ -167,8 +205,10 @@ gitViewer/
 ### Building
 
 ```bash
-go build -o gitviewer .
+go build .
 ```
+
+This creates a `gitViewer` executable.
 
 ### Testing Locally
 

@@ -44,10 +44,11 @@ type Server struct {
 
 // BaseData contains fields shared by all page templates.
 type BaseData struct {
-	RepoName   string
-	Ref        string
-	Branches   []string
-	HasGHPages bool
+	RepoName      string
+	Ref           string
+	Branches      []string
+	HasGHPages    bool     // Kept for backward compatibility
+	PagesBranches []string // All branches available for pages viewing
 }
 
 // IndexData contains data for the overview page.
@@ -188,7 +189,7 @@ func (s *Server) routes() http.Handler {
 	mux.HandleFunc("/raw", s.handleRaw)
 	mux.HandleFunc("/commits", s.handleCommits)
 	mux.HandleFunc("/diff", s.handleDiff)
-	mux.HandleFunc("/gh-pages/", s.handleGHPages)
+	mux.HandleFunc("/pages/", s.handlePages)
 	mux.HandleFunc("/workflows", s.handleWorkflows)
 	mux.HandleFunc("/static/app.css", handleAppCSS)
 	mux.HandleFunc("/static/app.js", handleAppJS)
@@ -422,32 +423,77 @@ func (s *Server) handleDiff(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleGHPages serves the contents of the gh-pages branch as a static site.
+// handlePages serves the contents of any branch as a static site.
 //
-// It maps /gh-pages/ to gh-pages:index.html and any nested path under that
-// prefix to the corresponding path in the gh-pages branch.
-func (s *Server) handleGHPages(w http.ResponseWriter, r *http.Request) {
-	has, err := gitHasBranch(s.repoPath, "gh-pages")
-	if err != nil {
-		s.httpError(w, r, http.StatusInternalServerError, "Failed to check gh-pages branch", err)
-		return
+// It maps /pages/{branch}/{path} to {branch}:{path}.
+// Branch names can contain slashes. The function tries progressively longer
+// prefixes as potential branch names until it finds a match.
+// For backward compatibility, /pages/ without a branch defaults to gh-pages.
+func (s *Server) handlePages(w http.ResponseWriter, r *http.Request) {
+	// Extract path after /pages/
+	pathAfterPages := strings.TrimPrefix(r.URL.Path, "/pages/")
+	
+	// Default to gh-pages for backward compatibility
+	if pathAfterPages == "" {
+		pathAfterPages = "gh-pages/"
 	}
-	if !has {
-		s.httpError(w, r, http.StatusNotFound, "gh-pages branch not found", nil)
-		return
+	
+	// Split the path into segments
+	segments := strings.Split(strings.TrimSuffix(pathAfterPages, "/"), "/")
+	
+	// Try progressively longer prefixes as potential branch names
+	// Start from the longest possible branch name (most segments)
+	var branch string
+	var subPath string
+	found := false
+	
+	for i := len(segments); i > 0; i-- {
+		potentialBranch := strings.Join(segments[:i], "/")
+		has, err := gitHasBranch(s.repoPath, potentialBranch)
+		if err != nil {
+			s.httpError(w, r, http.StatusInternalServerError, "Failed to check branch", err)
+			return
+		}
+		if has {
+			branch = potentialBranch
+			if i < len(segments) {
+				subPath = strings.Join(segments[i:], "/")
+			}
+			// Add trailing content if URL ended with slash
+			if strings.HasSuffix(pathAfterPages, "/") && subPath != "" {
+				subPath = subPath + "/"
+			}
+			found = true
+			break
+		}
+	}
+	
+	// If no valid branch found, default to gh-pages
+	if !found {
+		branch = "gh-pages"
+		subPath = pathAfterPages
+		// Verify gh-pages exists
+		has, err := gitHasBranch(s.repoPath, "gh-pages")
+		if err != nil {
+			s.httpError(w, r, http.StatusInternalServerError, "Failed to check gh-pages branch", err)
+			return
+		}
+		if !has {
+			s.httpError(w, r, http.StatusNotFound, "No valid branch found in path and gh-pages branch does not exist", nil)
+			return
+		}
 	}
 
-	subPath := strings.TrimPrefix(r.URL.Path, "/gh-pages/")
 	subPath = normalizeRepoPath(subPath)
 
 	if subPath == "" || strings.HasSuffix(subPath, "/") {
 		subPath = subPath + "index.html"
 	}
 
-	spec := fmt.Sprintf("gh-pages:%s", subPath)
+	spec := fmt.Sprintf("%s:%s", branch, subPath)
 	content, err := gitShowFile(s.repoPath, spec)
 	if err != nil {
-		s.httpError(w, r, http.StatusNotFound, "File not found in gh-pages", err)
+		s.httpError(w, r, http.StatusNotFound, fmt.Sprintf("File not found in %s", branch), err)
 		return
 	}
 
@@ -513,10 +559,11 @@ func (s *Server) baseData(ref string) (BaseData, error) {
 	}
 
 	return BaseData{
-		RepoName:   s.repoName,
-		Ref:        ref,
-		Branches:   branches,
-		HasGHPages: hasPages,
+		RepoName:      s.repoName,
+		Ref:           ref,
+		Branches:      branches,
+		HasGHPages:    hasPages,
+		PagesBranches: branches, // All branches can be viewed as pages
 	}, nil
 }
 
