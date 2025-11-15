@@ -17,8 +17,17 @@
       <a href="/tree?ref={{.Ref}}">Tree</a>
       <a href="/commits?ref={{.Ref}}">Commits</a>
       <a href="/workflows?ref={{.Ref}}">CI workflows</a>
-      {{if .HasGHPages}}
-        <a href="/gh-pages/">gh-pages</a>
+      {{if .PagesBranches}}
+        <div class="pages-picker">
+          <button data-toggle="collapse" data-target="pages-list" class="nav-btn small">Pages</button>
+          <div id="pages-list" class="pages-list" hidden>
+            {{range .PagesBranches}}
+              <a href="/pages/{{.}}/">{{.}}</a>
+            {{end}}
+          </div>
+        </div>
+      {{else if .HasGHPages}}
+        <a href="/pages/gh-pages/">gh-pages</a>
       {{end}}
     </nav>
     <div class="nav-right">

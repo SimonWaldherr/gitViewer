@@ -211,11 +211,13 @@ a:hover {
   color: #6b7280;
 }
 
-.branch-picker {
+.branch-picker,
+.pages-picker {
   position: relative;
 }
 
-.branch-list {
+.branch-list,
+.pages-list {
   position: absolute;
   right: 0;
   top: 120%;
@@ -233,12 +235,14 @@ a:hover {
   z-index: 20;
 }
 
-:root[data-theme="light"] .branch-list {
+:root[data-theme="light"] .branch-list,
+:root[data-theme="light"] .pages-list {
   background: #ffffff;
   border-color: #e5e7eb;
 }
 
-.branch-list a {
+.branch-list a,
+.pages-list a {
   font-size: 0.85rem;
   padding: 0.1rem 0.2rem;
 }
