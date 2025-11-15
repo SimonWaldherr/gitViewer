@@ -1,6 +1,11 @@
 # gitViewer
 
-A minimal web-based Git repository viewer written in Go. Similar in spirit to `python -m http.server`, but specifically designed for exploring Git repositories through a clean web interface.
+[![Go Version](https://img.shields.io/badge/go-1.25.4-blue.svg)](https://golang.org/doc/go1.25)
+[![License](https://img.shields.io/badge/license-see%20repository-lightgrey.svg)](LICENSE)
+
+A minimal, lightweight web-based Git repository viewer written in Go. Similar in spirit to `python -m http.server`, but specifically designed for exploring Git repositories through a clean, modern web interface.
+
+**Perfect for:** Quick local repository exploration, code reviews, documentation browsing, and teaching Git concepts visually.
 
 ## Features
 
