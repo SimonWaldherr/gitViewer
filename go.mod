@@ -1,3 +1,3 @@
-module github.com/SimonWaldherr/gitViewer
+module gitViewer
 
-go 1.25.4
+go 1.25.1
