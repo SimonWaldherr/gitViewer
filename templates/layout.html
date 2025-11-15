@@ -1,0 +1,45 @@
+{{define "layout"}}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{block "title" .}}{{.RepoName}}{{end}}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/app.css">
+  <script defer src="/static/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/">{{.RepoName}}</a>
+    <nav class="nav">
+      <a href="/">Overview</a>
+      <a href="/tree?ref={{.Ref}}">Tree</a>
+      <a href="/commits?ref={{.Ref}}">Commits</a>
+      <a href="/workflows?ref={{.Ref}}">CI workflows</a>
+      {{if .HasGHPages}}
+        <a href="/gh-pages/">gh-pages</a>
+      {{end}}
+    </nav>
+    <div class="nav-right">
+      <div class="branch-picker">
+        <button data-toggle="collapse" data-target="branch-list" class="nav-btn small">Branch: {{.Ref}}</button>
+        <div id="branch-list" class="branch-list" hidden>
+          {{range .Branches}}
+            <a href="/tree?ref={{.}}">{{.}}</a>
+          {{end}}
+        </div>
+      </div>
+      <button data-role="theme-toggle" class="nav-btn small">Light mode</button>
+    </div>
+  </div>
+</header>
+<main class="page">
+  {{block "content" .}}{{end}}
+</main>
+<footer class="footer">
+  <span>gitViewer · served from {{.Ref}}</span>
+</footer>
+</body>
+</html>
+{{end}}

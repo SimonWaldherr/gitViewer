@@ -1,0 +1,18 @@
+{{define "title"}}{{.RepoName}} · Workflows @ {{.Ref}}{{end}}
+{{define "content"}}
+<section class="card">
+  <h1 class="card-title">GitHub Actions workflows</h1>
+  {{if .Workflows}}
+    <ul class="link-list">
+      {{range .Workflows}}
+        <li>
+          <a href="/blob?ref={{$.Ref}}&amp;path={{.}}">{{.}}</a>
+        </li>
+      {{end}}
+    </ul>
+  {{else}}
+    <p class="hint">No workflows found under <code>.github/workflows</code> at ref <code>{{.Ref}}</code>.</p>
+  {{end}}
+</section>
+{{end}}
+{{define "workflows"}}{{template "layout" .}}{{end}}

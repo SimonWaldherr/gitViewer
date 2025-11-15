@@ -1,0 +1,11 @@
+{{define "title"}}{{.RepoName}} · Diff {{.From}}..{{.To}}{{end}}
+{{define "content"}}
+<section class="card">
+  <h1 class="card-title">Diff</h1>
+  <p class="path-line">
+    From <code>{{.From}}</code> to <code>{{.To}}</code>
+  </p>
+  <pre class="blob"><code>{{.Patch}}</code></pre>
+</section>
+{{end}}
+{{define "diff"}}{{template "layout" .}}{{end}}

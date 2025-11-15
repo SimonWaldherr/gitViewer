@@ -1,0 +1,42 @@
+{{define "title"}}{{.RepoName}} · Tree {{.Ref}}{{if .Path}} / {{.Path}}{{end}}{{end}}
+{{define "content"}}
+<section class="card">
+  <h1 class="card-title">Tree at {{.Ref}}</h1>
+  <p class="path-line">
+    Path:
+    <code>{{if .Path}}{{.Path}}{{else}}/{{end}}</code>
+    {{if .ParentPath}}
+      · <a href="/tree?ref={{.Ref}}&amp;path={{.ParentPath}}">up</a>
+    {{end}}
+  </p>
+  <table class="tree-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th class="num">Size</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{if .Entries}}
+        {{range .Entries}}
+          <tr>
+            <td>
+              {{if eq .Type "tree"}}
+                <a href="/tree?ref={{$.Ref}}&amp;path={{if $.Path}}{{$.Path}}/{{end}}{{.Name}}">{{.Name}}/</a>
+              {{else}}
+                <a href="/blob?ref={{$.Ref}}&amp;path={{if $.Path}}{{$.Path}}/{{end}}{{.Name}}">{{.Name}}</a>
+              {{end}}
+            </td>
+            <td>{{.Type}}</td>
+            <td class="num">{{if .Size}}{{.Size}}{{end}}</td>
+          </tr>
+        {{end}}
+      {{else}}
+        <tr><td colspan="3">No entries.</td></tr>
+      {{end}}
+    </tbody>
+  </table>
+</section>
+{{end}}
+{{define "tree"}}{{template "layout" .}}{{end}}

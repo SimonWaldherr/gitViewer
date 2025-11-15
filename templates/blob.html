@@ -1,0 +1,15 @@
+{{define "title"}}{{.RepoName}} · {{.Path}} @ {{.Ref}}{{end}}
+{{define "content"}}
+<section class="card">
+  <h1 class="card-title">File: {{.Path}}</h1>
+  <p class="path-line">
+    <a href="/tree?ref={{.Ref}}&amp;path={{parentPath .Path}}">Back to directory</a> ·
+    <a href="/raw?ref={{.Ref}}&amp;path={{.Path}}">Raw</a>
+  </p>
+  {{if .Truncated}}
+    <p class="hint">Preview truncated for large file. Use the <a href="/raw?ref={{.Ref}}&amp;path={{.Path}}">raw view</a> to see full contents.</p>
+  {{end}}
+  <pre class="blob"><code>{{.Content}}</code></pre>
+</section>
+{{end}}
+{{define "blob"}}{{template "layout" .}}{{end}}

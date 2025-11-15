@@ -1,0 +1,33 @@
+{{define "title"}}{{.RepoName}} · Commits @ {{.Ref}}{{end}}
+{{define "content"}}
+<section class="card">
+  <h1 class="card-title">Recent commits ({{.Ref}})</h1>
+  <table class="tree-table">
+    <thead>
+      <tr>
+        <th>Hash</th>
+        <th>Date</th>
+        <th>Message</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{if .Commits}}
+        {{range .Commits}}
+          <tr>
+            <td><code>{{.Hash}}</code></td>
+            <td>{{.Date}}</td>
+            <td>{{.Subject}}</td>
+            <td class="num">
+              <a href="/diff?from={{.Hash}}~1&amp;to={{.Hash}}">diff</a>
+            </td>
+          </tr>
+        {{end}}
+      {{else}}
+        <tr><td colspan="4">No commits found.</td></tr>
+      {{end}}
+    </tbody>
+  </table>
+</section>
+{{end}}
+{{define "commits"}}{{template "layout" .}}{{end}}

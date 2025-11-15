@@ -1,0 +1,273 @@
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 15px;
+}
+
+:root[data-theme="light"] body {
+  background: #f9fafb;
+  color: #111827;
+}
+
+a {
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(15, 23, 42, 0.98);
+  border-bottom: 1px solid #1f2937;
+  backdrop-filter: blur(10px);
+}
+
+:root[data-theme="light"] .topbar {
+  background: rgba(249, 250, 251, 0.97);
+  border-color: #e5e7eb;
+}
+
+.topbar-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0.4rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand {
+  font-weight: 600;
+  margin-right: 1.25rem;
+}
+
+.nav {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+}
+
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-btn {
+  border: 1px solid #4b5563;
+  background: transparent;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.nav-btn.small {
+  font-size: 0.8rem;
+}
+
+.nav-btn:hover {
+  background: rgba(148, 163, 184, 0.15);
+}
+
+.page {
+  max-width: 960px;
+  margin: 1rem auto 3rem;
+  padding: 0 1rem;
+}
+
+.card {
+  background: #020617;
+  border-radius: 0.5rem;
+  border: 1px solid #1f2937;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+}
+
+:root[data-theme="light"] .card {
+  background: #ffffff;
+  border-color: #e5e7eb;
+}
+
+.card-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem 1.5rem;
+}
+
+.meta-grid dt {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+}
+
+:root[data-theme="light"] .meta-grid dt {
+  color: #6b7280;
+}
+
+.meta-grid dd {
+  margin: 0.1rem 0 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.link-list li {
+  margin: 0.25rem 0;
+}
+
+.tree-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.tree-table th,
+.tree-table td {
+  padding: 0.3rem 0.35rem;
+  border-bottom: 1px solid #1f2937;
+}
+
+:root[data-theme="light"] .tree-table th,
+:root[data-theme="light"] .tree-table td {
+  border-color: #e5e7eb;
+}
+
+.tree-table th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+}
+
+:root[data-theme="light"] .tree-table th {
+  color: #6b7280;
+}
+
+.tree-table td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.path-line {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+}
+
+.blob {
+  background: #020617;
+  border-radius: 0.4rem;
+  border: 1px solid #1f2937;
+  padding: 0.75rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+:root[data-theme="light"] .blob {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+}
+
+.blob code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.footer {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1rem 1.5rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.branch-picker {
+  position: relative;
+}
+
+.branch-list {
+  position: absolute;
+  right: 0;
+  top: 120%;
+  min-width: 140px;
+  background: #020617;
+  border-radius: 0.5rem;
+  border: 1px solid #1f2937;
+  padding: 0.5rem;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+:root[data-theme="light"] .branch-list {
+  background: #ffffff;
+  border-color: #e5e7eb;
+}
+
+.branch-list a {
+  font-size: 0.85rem;
+  padding: 0.1rem 0.2rem;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+:root[data-theme="light"] .hint {
+  color: #6b7280;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.85em;
+}
+
+@media (max-width: 640px) {
+  .topbar-inner {
+    flex-wrap: wrap;
+  }
+
+  .nav {
+    flex-basis: 100%;
+    margin-top: 0.25rem;
+  }
+
+  .nav-right {
+    margin-left: 0;
+  }
+}

@@ -1,0 +1,32 @@
+{{define "title"}}{{.RepoName}} · Overview{{end}}
+{{define "content"}}
+<section class="card">
+  <h1 class="card-title">Repository overview</h1>
+  <dl class="meta-grid">
+    <div>
+      <dt>Repository</dt>
+      <dd>{{.RepoName}}</dd>
+    </div>
+    <div>
+      <dt>Current ref</dt>
+      <dd>{{.Ref}}</dd>
+    </div>
+    <div>
+      <dt>HEAD</dt>
+      <dd><code>{{.HeadHash}}</code></dd>
+    </div>
+  </dl>
+</section>
+<section class="card">
+  <h2 class="card-title">Quick links</h2>
+  <ul class="link-list">
+    <li><a href="/tree?ref={{.Ref}}">Browse tree at {{.Ref}}</a></li>
+    <li><a href="/commits?ref={{.Ref}}">View recent commits</a></li>
+    {{if .HasGHPages}}
+      <li><a href="/gh-pages/">Preview gh-pages static site</a></li>
+    {{end}}
+    <li><a href="/workflows?ref={{.Ref}}">Inspect CI workflows (.github/workflows)</a></li>
+  </ul>
+</section>
+{{end}}
+{{define "index"}}{{template "layout" .}}{{end}}
